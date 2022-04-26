@@ -1,20 +1,48 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React from "react";
+import Home from "./Components/Home";
+import "react-native-gesture-handler";
+import { NavigationContainer } from "@react-navigation/native";
+import {
+  createStackNavigator,
+  TransitionPreset,
+  CardStyleInterpolators,
+} from "@react-navigation/stack";
+import Details from "./Components/Details";
+import TabNavi from "./Components/TabNavi";
 
-export default function App() {
+const Stack = createStackNavigator();
+
+const App = () => {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator
+        screenOptions={{
+          gestureEnabled: true,
+          gestureDirection: "horizontal",
+          cardStyleInterpolator:
+            CardStyleInterpolators.forRevealFromBottomAndroid,
+        }}
+      >
+        <Stack.Screen
+          name="Home"
+          component={Home}
+          options={{
+            headerStyle: { backgroundColor: "#141414" },
+            headerTintColor: "#fff",
+          }}
+        />
+        <Stack.Screen
+          name="TabNavi"
+          component={TabNavi}
+          options={({ route }) => ({
+            title: route.params.name,
+            headerStyle: { backgroundColor: "#141414" },
+            headerTintColor: "#fff",
+          })}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
-}
+};
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default App;
