@@ -1,10 +1,17 @@
-import { View, Text, FlatList, StyleSheet } from "react-native";
+import { View, Text, FlatList, StyleSheet, RefreshControl } from "react-native";
 import React, { useState } from "react";
 import axios from "axios";
 import Item from "./Item";
 
 const List = ({ info, search, getInfo, navigation, route }) => {
   const [refresh, setRefresh] = useState(false);
+
+  const onRefresh = async () => {
+    setRefresh(true);
+    await getInfo();
+    setRefresh(false);
+  };
+
   return (
     <View style={styles.container}>
       <FlatList
@@ -18,12 +25,14 @@ const List = ({ info, search, getInfo, navigation, route }) => {
           <Item coin={item} navigation={navigation} route={route} />
         )}
         showsVerticalScrollIndicator={false}
-        refreshing={refresh}
-        onRefresh={async () => {
-          setRefresh(true);
-          await getInfo();
-          setRefresh(false);
-        }}
+        refreshControl={
+          <RefreshControl
+            refreshing={refresh}
+            colors={["#BF1A2F"]}
+            onRefresh={onRefresh}
+            progressBackgroundColor="transparent"
+          />
+        }
       />
     </View>
   );
