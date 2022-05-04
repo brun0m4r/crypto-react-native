@@ -1,6 +1,7 @@
 import { View, Text, StyleSheet, Image } from "react-native";
 import React, { useState } from "react";
 import AppLoader from "./AppLoader";
+import Chart from "./Chart";
 
 const Details = ({ coin }) => {
   return coin.name ? (
@@ -25,6 +26,7 @@ const Details = ({ coin }) => {
           </Text>
         </View>
       </View>
+      <Chart coin={coin.id} />
     </View>
   ) : (
     <AppLoader
