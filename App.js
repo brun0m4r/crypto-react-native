@@ -1,7 +1,7 @@
 import React from "react";
 import Home from "./Components/Home";
 import "react-native-gesture-handler";
-import { NavigationContainer } from "@react-navigation/native";
+import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import {
   createStackNavigator,
   TransitionPreset,
@@ -12,15 +12,20 @@ import TabNavi from "./Components/TabNavi";
 
 const Stack = createStackNavigator();
 
+const MyTheme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    background: "#141414",
+  },
+};
+
 const App = () => {
   return (
-    <NavigationContainer>
+    <NavigationContainer theme={MyTheme}>
       <Stack.Navigator
         screenOptions={{
-          gestureEnabled: true,
-          gestureDirection: "horizontal",
-          cardStyleInterpolator:
-            CardStyleInterpolators.forRevealFromBottomAndroid,
+          cardStyleInterpolator: CardStyleInterpolators.forModalPresentationIOS,
         }}
       >
         <Stack.Screen

@@ -1,9 +1,23 @@
 import { View, Text, StyleSheet, Image } from "react-native";
-import React, { useState } from "react";
-import AppLoader from "./AppLoader";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
-const Details = ({ coin }) => {
-  return coin.name ? (
+const SimpleDetails = ({ id }) => {
+  const [coin, setCoin] = useState({});
+
+  console.log(id);
+
+  const getCoin = async (id) => {
+    const api = await (
+      await axios.get(`https://api.coingecko.com/api/v3/coins/${id}`)
+    ).data;
+    setCoin(api);
+  };
+
+  useEffect(() => {
+    getCoin(id);
+  }, []);
+  return (
     <View style={styles.container}>
       <Image style={styles.image} source={{ uri: coin.image?.large }} />
       <Text style={styles.text}>{coin.name}</Text>
@@ -26,11 +40,6 @@ const Details = ({ coin }) => {
         </View>
       </View>
     </View>
-  ) : (
-    <AppLoader
-      styles={styles.loading}
-      loader={require("../assets/crypto-loader.json")}
-    />
   );
 };
 const styles = StyleSheet.create({
@@ -65,10 +74,6 @@ const styles = StyleSheet.create({
   negative: {
     color: "#fc4422",
   },
-  loading: {
-    height: "30%",
-    zIndex: 1,
-  },
 });
 
-export default Details;
+export default SimpleDetails;

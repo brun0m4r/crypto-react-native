@@ -2,10 +2,12 @@ import { View, Text, TextInput, StyleSheet, StatusBar } from "react-native";
 import React, { useState, useEffect } from "react";
 import List from "./List";
 import axios from "axios";
+import AppLoader from "./AppLoader";
 
 const Home = ({ navigation, route }) => {
   const [info, setInfo] = useState([]);
   const [search, setSearch] = useState("");
+  const [loading, setLoading] = useState(false);
   const getInfo = async () => {
     const api = await axios.get(
       "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false"
@@ -13,10 +15,14 @@ const Home = ({ navigation, route }) => {
     setInfo(api.data);
   };
   useEffect(() => {
+    setLoading(true);
     getInfo();
+    setTimeout(() => {
+      setLoading(false);
+    }, 1000);
   }, []);
 
-  return (
+  return info && !loading ? (
     <View style={styles.container}>
       <StatusBar backgroundColor="#141414" />
       <View style={styles.header}>
@@ -36,6 +42,8 @@ const Home = ({ navigation, route }) => {
         getInfo={getInfo}
       />
     </View>
+  ) : (
+    <AppLoader loader={require("../assets/crypto-phone.json")} />
   );
 };
 
@@ -59,10 +67,15 @@ const styles = StyleSheet.create({
   },
   search: {
     color: "#ffffff",
-    borderBottomColor: "#4657ce",
+    borderBottomColor: "#fff",
+    borderRadius: 5,
     borderBottomWidth: 1,
     width: "40%",
     textAlign: "center",
+  },
+  loading: {
+    zIndex: 1,
+    height: "100%",
   },
 });
 
