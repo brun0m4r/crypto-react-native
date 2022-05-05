@@ -1,9 +1,17 @@
-import { View, Text, StyleSheet, Image } from "react-native";
-import React, { useState } from "react";
+import { View, Text, StyleSheet, Image, TextInput } from "react-native";
+import React, { useState, useEffect } from "react";
 import AppLoader from "./AppLoader";
 import Chart from "./Chart";
 
 const Details = ({ coin }) => {
+  const [days, setDays] = useState(14);
+
+  useEffect(() => {
+    if (!days) {
+      setDays(14);
+    }
+  }, [days]);
+
   return coin.name ? (
     <View style={styles.container}>
       <Image style={styles.image} source={{ uri: coin.image?.large }} />
@@ -26,7 +34,16 @@ const Details = ({ coin }) => {
           </Text>
         </View>
       </View>
-      <Chart coin={coin.id} />
+      <View style={{ flexDirection: "row", alignItems: "center", margin: 20 }}>
+        <TextInput
+          placeholder="14"
+          placeholderTextColor="#aaa"
+          onChangeText={(text) => setDays(text)}
+          style={styles.inputDays}
+        />
+        <Text style={{ color: "#fff" }}>Days</Text>
+      </View>
+      <Chart coin={coin.id} days={days} setDays={setDays} />
     </View>
   ) : (
     <AppLoader
@@ -70,6 +87,14 @@ const styles = StyleSheet.create({
   loading: {
     height: "30%",
     zIndex: 1,
+  },
+  inputDays: {
+    color: "#fff",
+    textAlign: "center",
+    width: 50,
+    height: 30,
+    borderBottomColor: "#7E429B",
+    borderBottomWidth: 1,
   },
 });
 

@@ -22,7 +22,7 @@ const Home = ({ navigation, route }) => {
     }, 1000);
   }, []);
 
-  return info && !loading ? (
+  return info.length && !loading ? (
     <View style={styles.container}>
       <StatusBar backgroundColor="#141414" />
       <View style={styles.header}>

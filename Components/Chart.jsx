@@ -1,15 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { Grid, LineChart, XAxis, YAxis } from "react-native-svg-charts";
-import { View } from "react-native";
+import { View, TextInput } from "react-native";
 import axios from "axios";
+import AppLoader from "./AppLoader";
+import { Picker } from "@react-native-picker/picker";
 
-const Chart = ({ coin }) => {
+const Chart = ({ coin, days, setDays }) => {
   const [data, setData] = useState([]);
 
   const getData = async () => {
     const data = (
       await axios.get(
-        `https://api.coingecko.com/api/v3/coins/${coin}/market_chart?vs_currency=usd&days=14`
+        `https://api.coingecko.com/api/v3/coins/${coin}/market_chart?vs_currency=usd&days=${
+          !days ? 14 : days
+        }`
       )
     ).data;
     if (data) {
@@ -19,13 +23,13 @@ const Chart = ({ coin }) => {
 
   useEffect(() => {
     getData();
-  }, []);
+  }, [days]);
 
   const axesSvg = { fontSize: 10, fill: "grey" };
   const verticalContentInset = { top: 10, bottom: 10 };
   const xAxisHeight = 0;
 
-  return (
+  return data.length ? (
     <View style={{ height: 200, padding: 20, flexDirection: "row" }}>
       <YAxis
         data={data}
@@ -44,6 +48,8 @@ const Chart = ({ coin }) => {
         </LineChart>
       </View>
     </View>
+  ) : (
+    <AppLoader loader={require("../assets/chart-loading.json")} />
   );
 };
 
